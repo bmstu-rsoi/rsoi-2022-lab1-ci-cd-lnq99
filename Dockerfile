@@ -10,7 +10,7 @@ COPY server .
 
 RUN go mod tidy
 
-RUN go build -o api ./cmd/main.go
+RUN go build -o api ./cmd/main/main.go
 
 
 FROM alpine as production-stage
