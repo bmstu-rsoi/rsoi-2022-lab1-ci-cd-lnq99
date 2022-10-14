@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"rsoi-1/internal/driver"
 	"rsoi-1/internal/repository"
 	"rsoi-1/internal/server"
@@ -14,7 +15,8 @@ func main() {
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		panic(err)
+		log.Println(cfg)
+		//panic(err)
 	}
 
 	db, err := driver.NewSQLDatabase(&cfg.DbConfig)
