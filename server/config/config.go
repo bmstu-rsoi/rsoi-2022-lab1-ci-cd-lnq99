@@ -12,7 +12,6 @@ type DbConfig struct {
 	User     string `mapstructure:"DB_USER"`
 	Password string `mapstructure:"DB_PASSWORD"`
 	Name     string `mapstructure:"DB_NAME"`
-	Driver   string `mapstructure:"DB_DRIVER"`
 }
 
 type ServerConfig struct {
@@ -42,5 +41,16 @@ func LoadConfig() (*Config, error) {
 	viper.Unmarshal(&config.DbConfig)
 	viper.Unmarshal(&config.ServerConfig)
 	//err = viper.Unmarshal(&config)
+
+	//config.ServerConfig.Host = getEnv("HOST", config.ServerConfig.Host)
+	//config.ServerConfig.Port = getEnv("PORT", config.ServerConfig.Port)
+
 	return &config, err
 }
+
+//func getEnv(key, fallback string) string {
+//	if value, ok := os.LookupEnv(key); ok {
+//		return value
+//	}
+//	return fallback
+//}
