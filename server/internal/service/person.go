@@ -6,10 +6,10 @@ import (
 )
 
 type PersonServiceImpl struct {
-	repo repository.PersonRepo
+	repo repository.IPersonRepo
 }
 
-func NewPersonService(repo repository.PersonRepo) IPersonService {
+func NewPersonService(repo repository.IPersonRepo) IPersonService {
 	return &PersonServiceImpl{repo}
 }
 
@@ -25,6 +25,9 @@ func (s *PersonServiceImpl) ListPersons() ([]model.PersonResponse, error) {
 
 func (s *PersonServiceImpl) GetPerson(id int32) (model.PersonResponse, error) {
 	p, err := s.repo.SelectById(id)
+	if err != nil {
+		return model.PersonResponse{}, err
+	}
 	return p.ToResponse(), err
 }
 
@@ -37,7 +40,6 @@ func (s *PersonServiceImpl) CreatePerson(pr *model.PersonRequest) (int32, error)
 func (s *PersonServiceImpl) EditPerson(id int32, pr *model.PersonRequest) error {
 	p := model.Person{Id: id}
 	p.FromRequest(pr)
-
 	return s.repo.UpdateById(&p)
 }
 

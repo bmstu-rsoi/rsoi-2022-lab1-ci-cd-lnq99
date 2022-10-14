@@ -21,7 +21,7 @@ const (
 	DeleteByIdQuery = "delete from Persons where id=$1"
 )
 
-func NewPersonSqlRepo(db *sql.DB) PersonRepo {
+func NewPersonSqlRepo(db *sql.DB) IPersonRepo {
 	return &PersonSqlRepo{db}
 }
 

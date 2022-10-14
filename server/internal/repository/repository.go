@@ -6,7 +6,7 @@ import (
 	errors "rsoi-1/internal/model/error"
 )
 
-type PersonRepo interface {
+type IPersonRepo interface {
 	SelectAll() ([]model.Person, error)
 	SelectById(id int32) (model.Person, error)
 	Insert(person *model.Person) (int32, error)
@@ -15,7 +15,7 @@ type PersonRepo interface {
 }
 
 type Repo struct {
-	Person PersonRepo
+	Person IPersonRepo
 }
 
 func NewSqlRepository(db *sql.DB) *Repo {
