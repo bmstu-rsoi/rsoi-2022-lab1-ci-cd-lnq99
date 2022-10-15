@@ -28,8 +28,6 @@ func (s *PersonDataSource) Init() {
 	}
 	s.IdFound = 2
 	s.IdNotFound = 10
-	//fmt.Println(s.data[1])
-	//fmt.Println(s.data[2])
 }
 
 func (s *PersonDataSource) Get(id int32) *model.Person {

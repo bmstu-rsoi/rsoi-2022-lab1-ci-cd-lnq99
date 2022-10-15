@@ -14,9 +14,9 @@ const (
 	// returning - Postgresql
 	SelectAllQuery  = "select * from Persons"
 	SelectByIdQuery = "select * from Persons where id=$1"
-	InsertQuery     = "insert into Persons(name, age, work, address) values ($1, $2, $3, $4) returning id"
+	InsertQuery     = "insert into Persons(name, age, address, work) values ($1, $2, $3, $4) returning id"
 	UpdateByIdQuery = `update Persons set
-		name=coalesce($2,name), age=coalesce($3,age), work=coalesce($4,work), address=coalesce($5,address)
+		name=coalesce($2,name), age=coalesce($3,age), address=coalesce($4,address), work=coalesce($5,work)
 		where id=$1`
 	DeleteByIdQuery = "delete from Persons where id=$1"
 )
@@ -30,8 +30,8 @@ func scanPerson(row MultiScanner, p *model.Person) error {
 		&p.Id,
 		&p.Name,
 		&p.Age,
-		&p.Work,
 		&p.Address,
+		&p.Work,
 	)
 	return err
 }
@@ -64,13 +64,13 @@ func (r *PersonSqlRepo) SelectById(id int32) (p model.Person, err error) {
 }
 
 func (r *PersonSqlRepo) Insert(p *model.Person) (id int32, err error) {
-	row := r.db.QueryRow(InsertQuery, p.Name, p.Age, p.Work, p.Address)
+	row := r.db.QueryRow(InsertQuery, p.Name, p.Age, p.Address, p.Work)
 	err = row.Scan(&id)
 	return
 }
 
 func (r *PersonSqlRepo) UpdateById(p *model.Person) error {
-	res, err := r.db.Exec(UpdateByIdQuery, p.Id, p.Name, p.Age, p.Work, p.Address)
+	res, err := r.db.Exec(UpdateByIdQuery, p.Id, p.Name, p.Age, p.Address, p.Work)
 	if err == nil {
 		err = handleRowsAffected(res)
 	}

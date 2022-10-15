@@ -11,7 +11,7 @@ type IPersonService interface {
 	ListPersons() ([]model.PersonResponse, error)
 	GetPerson(id int32) (model.PersonResponse, error)
 	CreatePerson(person *model.PersonRequest) (int32, error)
-	EditPerson(id int32, person *model.PersonRequest) error
+	EditPerson(id int32, person *model.PersonRequest) (model.PersonResponse, error)
 	DeletePerson(id int32) error
 }
 

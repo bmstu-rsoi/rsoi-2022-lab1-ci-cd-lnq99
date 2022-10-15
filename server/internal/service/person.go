@@ -37,10 +37,14 @@ func (s *PersonServiceImpl) CreatePerson(pr *model.PersonRequest) (int32, error)
 	return s.repo.Insert(&p)
 }
 
-func (s *PersonServiceImpl) EditPerson(id int32, pr *model.PersonRequest) error {
+func (s *PersonServiceImpl) EditPerson(id int32, pr *model.PersonRequest) (r model.PersonResponse, err error) {
 	p := model.Person{Id: id}
 	p.FromRequest(pr)
-	return s.repo.UpdateById(&p)
+	err = s.repo.UpdateById(&p)
+	if err == nil {
+		return s.GetPerson(id)
+	}
+	return
 }
 
 func (s *PersonServiceImpl) DeletePerson(id int32) error {

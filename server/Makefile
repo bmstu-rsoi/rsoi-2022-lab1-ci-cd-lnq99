@@ -1,5 +1,15 @@
 run:
-	go run cmd/main.go
+	go run cmd/main/main.go
+
+run_with_env:
+	DB_HOST=localhost	\
+    DB_PORT=5432		\
+    DB_USER=program		\
+    DB_PASSWORD=test	\
+    DB_NAME=persons		\
+    HOST=localhost		\
+    PORT=8080			\
+    go run cmd/main/main.go
 
 test: unit
 
