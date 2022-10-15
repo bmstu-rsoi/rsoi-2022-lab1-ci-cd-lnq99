@@ -1,4 +1,4 @@
-//go:build unit
+///go:build unit
 
 package service
 
@@ -137,10 +137,12 @@ func (s *PersonServiceSuite) TestEditPerson() {
 		p := model.Person{}
 		p.FromRequest(&req)
 		s.repo.On("UpdateById", &p).Return(nil).Once()
+		s.repo.On("SelectById", p.Id).Return(p, nil).Once()
 		// Act
-		err := s.service.EditPerson(p.Id, &req)
+		pr, err := s.service.EditPerson(p.Id, &req)
 		// Assert
 		assert.NoError(t, err)
+		assert.Equal(t, pr, p.ToResponse())
 	})
 
 	s.T().Run("Id not found", func(t *testing.T) {
@@ -153,10 +155,11 @@ func (s *PersonServiceSuite) TestEditPerson() {
 		p.FromRequest(&req)
 		s.repo.On("UpdateById", &p).Return(errors.NoAffected).Once()
 		// Act
-		err := s.service.EditPerson(p.Id, &req)
+		pr, err := s.service.EditPerson(p.Id, &req)
 		// Assert
 		assert.Error(t, err)
 		assert.Equal(t, err, errors.NoAffected)
+		assert.Equal(t, pr, model.PersonResponse{})
 	})
 }
 

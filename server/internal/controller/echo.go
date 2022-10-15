@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"rsoi-1/internal/model"
 	errors "rsoi-1/internal/model/error"
@@ -54,8 +53,6 @@ func (c *EchoController) GetPerson(ctx echo.Context) error {
 func (c *EchoController) CreatePerson(ctx echo.Context) error {
 	var person model.PersonRequest
 	err := ctx.Bind(&person)
-	log.Println(person)
-	log.Println(err)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, model.ValidationErrorResponse{Message: err.Error()})
 	}
@@ -94,11 +91,20 @@ func (c *EchoController) EditPerson(ctx echo.Context) error {
 		return EchoResponseInternalServerError(ctx, err)
 	}
 
-	err = c.services.Person.EditPerson(id, &person)
+	err = ctx.Bind(&person)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, model.ValidationErrorResponse{Message: err.Error()})
+	}
+	err = ctx.Validate(&person)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, model.ValidationErrorResponse{Message: err.Error()})
+	}
+
+	r, err := c.services.Person.EditPerson(id, &person)
 	if err != nil {
 		return EchoResponseInternalServerError(ctx, err)
 	}
-	return ctx.NoContent(http.StatusOK)
+	return ctx.JSON(http.StatusOK, r)
 }
 
 func (c *EchoController) DeletePerson(ctx echo.Context) error {

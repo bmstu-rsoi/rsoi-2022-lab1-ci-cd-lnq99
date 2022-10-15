@@ -13,7 +13,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 )
 
 type EchoServer struct {
@@ -37,7 +36,7 @@ func NewEchoServer(services *service.Services, cfg *config.ServerConfig) Server 
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit("1K"))
 
-	e.Logger.SetLevel(log.INFO)
+	//e.Logger.SetLevel(log.INFO)
 	e.Validator = &CustomValidator{Validator: validator.New()}
 
 	ctrl := controller.NewEchoController(services)
